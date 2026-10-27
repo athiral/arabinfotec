@@ -21,6 +21,7 @@
   <link href="leadership.css" rel="stylesheet"/>
   <link href="product-work.css" rel="stylesheet"/>
   <link href="solutions.css" rel="stylesheet"/>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Ld0nUAsAAAAACSKi9MO6nAy2NovHzlg8l04TSyP"></script>
  </head>
  <body data-page="home">
   <a class="skip" href="#main">
@@ -645,9 +646,15 @@
        </a>
       </div>
      </div>
-     <form id="brief-form">
+     <form id="brief-form" action="send-inquiry.php" method="POST">
+      <input type="text" name="hp_name" style="display:none;" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input type="hidden" name="form_loaded_at" id="form_loaded_at" value="">
+      <input type="hidden" name="ad_source" id="ad_source" value="">
+      <input type="hidden" name="sourcetag" id="sourcetag" value="">
+      <input type="hidden" name="utm_campaign" id="utm_campaign" value="">
+      <input type="hidden" name="recaptcha_token" id="recaptcha_token" value="">
       <label for="name">
-       Your name
+       Your name *
        <input autocomplete="name" id="name" maxlength="100" name="name" placeholder="How should we address you?" required=""/>
       </label>
       <label for="company">
@@ -655,11 +662,15 @@
        <input autocomplete="organization" id="company" maxlength="160" name="company" placeholder="Your company name"/>
       </label>
       <label for="email">
-       Your email
+       Your email *
        <input autocomplete="email" id="email" maxlength="200" name="email" placeholder="name@company.com" required="" type="email"/>
       </label>
+      <label for="phone">
+       Phone / WhatsApp *
+       <input autocomplete="tel" id="phone" maxlength="25" name="phone" placeholder="+971 50 123 4567" required="" type="tel"/>
+      </label>
       <label for="service">
-       I&rsquo;m interested in
+       I&rsquo;m interested in *
        <select id="service" name="service">
         <option>
          Website design
@@ -680,26 +691,26 @@
       </label>
       <label for="message">
        A little about your project
-       <textarea id="message" maxlength="2000" name="message" placeholder="What would you like to create or improve?" required="" rows="4"></textarea>
+       <textarea id="message" maxlength="2000" name="message" placeholder="What would you like to create or improve?" rows="4"></textarea>
       </label>
       <div class="form-buttons">
-       <button class="button" name="channel" type="submit" value="email">
-        Continue by email
+       <button class="button" id="submit-btn" type="submit">
+        Send Enquiry
         <span>
          &nearrow;
         </span>
        </button>
-       <button class="button secondary" name="channel" type="submit" value="whatsapp">
-        Continue on WhatsApp
+       <a class="button secondary" href="https://wa.me/971543697999" rel="noopener" target="_blank" style="text-align:center;text-decoration:none;">
+        Chat on WhatsApp
         <span>
          &nearrow;
         </span>
-       </button>
+       </a>
       </div>
       <p class="form-note">
-       Your brief opens in your email app or WhatsApp. Review it there and press Send. This website does not store your enquiry.
+       Your enquiry is sent securely to our team. We'll get back to you shortly.
       </p>
-      <p id="form-status" role="status">
+      <p id="form-status" role="status" aria-live="polite">
       </p>
      </form>
     </div>
@@ -932,7 +943,7 @@
     </a>
    </div>
   </footer>
-  <script src="app.js">
+  <script src="app.js?v=2.2">
   </script>
  </body>
 </html>

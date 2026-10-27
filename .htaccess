@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Ensure index.html and index.php are default directory indexes
+DirectoryIndex index.html index.php
+
+# 1. Remove index.html from URL (301 Redirect index.html to clean directory)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\s+([^?]*?)index\.html[\s?] [NC]
+RewriteRule ^(.*?)index\.html$ %1 [R=301,L,NE]
+
+# 2. Remove .html extension from URL (e.g., thankyou.html -> thankyou)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\s+([^?]*?)\.html[\s?] [NC]
+RewriteCond %{REQUEST_URI} !index\.html$ [NC]
+RewriteRule ^(.*)\.html$ %1 [R=301,L,NE]
+
+# 3. Internally load .html file if clean URL is requested (e.g., /thankyou loads thankyou.html)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+</IfModule>

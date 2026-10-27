@@ -8,7 +8,104 @@ document.addEventListener('click',e=>{document.querySelectorAll('.nav-services[o
 const service=document.querySelector('#service'),selected=new URLSearchParams(location.search).get('service');
 if(service&&selected&&[...service.options].some(x=>x.value===selected))service.value=selected;
 const form=document.querySelector('#brief-form');
-form?.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;const f=new FormData(form);const body='Hello Arabinfotec,\n\nMy name is '+f.get('name')+'.\nCompany: '+(f.get('company')||'Not provided')+'\nEmail: '+f.get('email')+'\nInterested in: '+f.get('service')+'\n\n'+f.get('message')+'\n\nThank you.';const channel=e.submitter?.value||'email';const status=document.querySelector('#form-status');if(channel==='whatsapp'){const url='https://wa.me/971543697999?text='+encodeURIComponent(body);window.open(url,'_blank','noopener,noreferrer');status.textContent='Your brief is ready in WhatsApp. Review it and press Send there. If it did not open, allow pop-ups or use the WhatsApp contact link.';}else{location.href='mailto:hello@arabinfotec.com?subject='+encodeURIComponent('Project enquiry: '+f.get('service'))+'&body='+encodeURIComponent(body);status.textContent='Your email app will open with the brief. Review it and press Send there. You can also continue on WhatsApp.';}});
+if(form){
+  const loadedInput=form.querySelector('[name="form_loaded_at"]');
+  if(loadedInput) loadedInput.value=Date.now().toString();
+
+  const urlParams=new URLSearchParams(window.location.search);
+  const adSrc=form.querySelector('[name="ad_source"]');
+  if(adSrc) adSrc.value=urlParams.get('utm_source')||urlParams.get('ad_source')||'';
+  const srcTag=form.querySelector('[name="sourcetag"]');
+  if(srcTag) srcTag.value=urlParams.get('sourcetag')||'';
+  const utmCamp=form.querySelector('[name="utm_campaign"]');
+  if(utmCamp) utmCamp.value=urlParams.get('utm_campaign')||'';
+
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!form.reportValidity()) return;
+
+    const status=document.querySelector('#form-status');
+    const submitBtn=form.querySelector('#submit-btn')||form.querySelector('button[type="submit"]');
+    const originalBtnText=submitBtn?submitBtn.innerHTML:'Send Enquiry <span>↗</span>';
+
+    if(submitBtn){
+      submitBtn.disabled=true;
+      submitBtn.innerHTML='Sending...';
+    }
+    if(status){
+      status.style.color='#475569';
+      status.textContent='Sending your enquiry...';
+    }
+
+    try{
+      const SITE_KEY='6Ld0nUAsAAAAACSKi9MO6nAy2NovHzlg8l04TSyP';
+      let recaptchaToken='';
+      if(typeof grecaptcha!=='undefined'&&grecaptcha.execute){
+        try{
+          recaptchaToken=await new Promise(resolve=>{
+            const timer=setTimeout(()=>resolve(''),1500);
+            grecaptcha.ready(async()=>{
+              try{
+                const t=await grecaptcha.execute(SITE_KEY,{action:'submit'});
+                clearTimeout(timer);
+                resolve(t||'');
+              }catch(ex){
+                clearTimeout(timer);
+                resolve('');
+              }
+            });
+          });
+        }catch(err){
+          console.warn('reCAPTCHA error:',err);
+        }
+      }
+
+      const f=new FormData(form);
+      if(recaptchaToken){
+        f.set('recaptcha_token',recaptchaToken);
+      }
+
+      const actionUrl=form.getAttribute('action')||'send-inquiry.php';
+      const response=await fetch(actionUrl,{
+        method:'POST',
+        body:f,
+        headers:{'X-Requested-With':'XMLHttpRequest'}
+      });
+
+      const data=await response.json().catch(()=>null);
+
+      if(response.ok&&data&&data.success){
+        if(status){
+          status.style.color='#16a34a';
+          status.textContent=data.message||'Thanks — redirecting...';
+        }
+        setTimeout(()=>{
+          window.location.href='thankyou.html';
+        },300);
+      }else{
+        const msg=(data&&data.message)?data.message:'Submission failed. Please check your details and try again.';
+        if(status){
+          status.style.color='#dc2626';
+          status.textContent=msg;
+        }
+        if(submitBtn){
+          submitBtn.disabled=false;
+          submitBtn.innerHTML=originalBtnText;
+        }
+      }
+    }catch(err){
+      console.error('Submission error:',err);
+      if(status){
+        status.style.color='#dc2626';
+        status.textContent='An unexpected error occurred. Please try again.';
+      }
+      if(submitBtn){
+        submitBtn.disabled=false;
+        submitBtn.innerHTML=originalBtnText;
+      }
+    }
+  });
+}
 const filters=document.querySelectorAll('[data-filter]'),projects=document.querySelectorAll('[data-category]');
 filters.forEach(button=>button.addEventListener('click',()=>{filters.forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});const featured=button.dataset.filter==='featured';document.querySelector('.portfolio-grid')?.classList.toggle('featured-mode',featured);let count=0;projects.forEach(project=>{const show=featured?project.dataset.featured==='true':project.dataset.category===button.dataset.filter;project.hidden=!show;if(show)count++;});document.querySelector('#project-count').textContent=count+(featured?' featured projects':' project'+(count===1?'':'s'));}));
 
