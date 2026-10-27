@@ -76,23 +76,20 @@ if ($origin && !in_array($origin, $allowedOrigins, true) && !$isLocal) {
 /* =========================================================
    CONFIG (MOVE TO ENV IN REAL DEPLOYMENT)
 ========================================================= */
-define('RECAPTCHA_SECRET', '6Ld0nUAsAAAAACSKi9MO6nAy2NovHzlg8l04TSyP');
+define('RECAPTCHA_SECRET', '6Le2RQMuAAAAAHkAq99MrkrB7Qt1I1sjpgfe5tZB');
 
 define('SMTP_HOST', 'ded6951.inmotionhosting.com');
 define('SMTP_USER', 'mailer@arabinfotec.com');
 define('SMTP_PASS', '2uumwpFKXA8Y');
 define('SMTP_PORT', 587);
-// Production admin email:
-// define('ADMIN_EMAIL', 'hello@arabinfotec.com');
-// Testing admin email (safe for local tests):
-define('ADMIN_EMAIL', 'athira@virtualsystechnologies.com');
+define('ADMIN_EMAIL', 'hello@arabinfotec.com');
 
 define('CC_EMAILS', [
-    // 'info@arabinfotechllc.com',
-    // 'sreechand@arabinfotechllc.com',
-    // 'sreechand@vstbiz.com',
-    // 'sangeeta@vstbiz.com',
-    // 'praveen@vstbiz.com',
+    'info@arabinfotechllc.com',
+    'sreechand@arabinfotechllc.com',
+    'sreechand@vstbiz.com',
+    'sangeeta@vstbiz.com',
+    'praveen@vstbiz.com',
     'athira@virtualsystechnologies.com'
 ]);
 
