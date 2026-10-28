@@ -96,7 +96,8 @@ nav a:hover {
     font-weight:700;
     letter-spacing:2px;
     color:var(--pink);
-    margin:0 0 28px
+    margin:0 0 28px;
+    text-transform: uppercase;
 }
 h1 {
     font-size:clamp(62px,6.6vw,100px);
@@ -281,10 +282,11 @@ h3 {
     font-size:26px
 }
 .project-caption small {
-    font-size:10px;
+    font-size:12px;
     letter-spacing:1.5px;
     color:var(--pink);
-    font-weight:700
+    font-weight:700;
+    text-transform: uppercase;
 }
 .project-caption h3 {
     font-size:27px;

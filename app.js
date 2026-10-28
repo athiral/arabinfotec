@@ -80,7 +80,7 @@ if(form){
           status.textContent=data.message||'Thanks — redirecting...';
         }
         setTimeout(()=>{
-          window.location.href='thankyou.html';
+          window.location.href='thankyou';
         },300);
       }else{
         const msg=(data&&data.message)?data.message:'Submission failed. Please check your details and try again.';

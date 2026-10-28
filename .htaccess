@@ -1,19 +1,48 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
+DirectorySlash Off
 
-# Ensure index.html and index.php are default directory indexes
-DirectoryIndex index.html index.php
+# 1. Default directory index
+DirectoryIndex index.php index.html
 
-# 1. Remove index.html from URL (301 Redirect index.html to clean directory)
-RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\s+([^?]*?)index\.html[\s?] [NC]
-RewriteRule ^(.*?)index\.html$ %1 [R=301,L,NE]
+# 2. Redirect direct requests for index.php or index.html to clean root /
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\s+([^?]*?)index\.(php|html)[\s?] [NC]
+RewriteRule ^(.*?)index\.(php|html)$ %1 [R=301,L,NE]
 
-# 2. Remove .html extension from URL (e.g., thankyou.html -> thankyou)
-RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\s+([^?]*?)\.html[\s?] [NC]
+# 3. Redirect direct requests for .html (e.g. /about.html) to clean URL without extension
+RewriteCond %{THE_REQUEST} \s+([^?\s]+)\.html[\s?] [NC]
 RewriteCond %{REQUEST_URI} !index\.html$ [NC]
 RewriteRule ^(.*)\.html$ %1 [R=301,L,NE]
 
-# 3. Internally load .html file if clean URL is requested (e.g., /thankyou loads thankyou.html)
+# 4. Redirect direct requests for .php to clean URL (removes .php from browser address bar)
+# Explicitly exclude POST requests, send-inquiry.php, and send-enquiry.php so contact form is never affected
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{THE_REQUEST} \s+([^?\s]+)\.php[\s?] [NC]
+RewriteCond %{REQUEST_URI} !send-inquiry\.php$ [NC]
+RewriteCond %{REQUEST_URI} !send-enquiry\.php$ [NC]
+RewriteCond %{REQUEST_URI} !index\.php$ [NC]
+RewriteRule ^(.*)\.php$ %1 [R=301,L,NE]
+
+# 5. Remove trailing slash from non-directories (e.g. /about/ -> /about)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{THE_REQUEST} \s+([^?\s]+)/+[\s?] [NC]
+RewriteRule ^(.+)/$ %1 [R=301,L,NE]
+
+# 6. Special case: /solutions and /solutions/ load solutions.php
+RewriteRule ^solutions/?$ solutions.php [L]
+
+# 7. Add trailing slash to any real subdirectories (e.g. projects/bayatplaza -> projects/bayatplaza/)
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_URI} !^.*/solutions/?$ [NC]
+RewriteCond %{THE_REQUEST} \s+([^?\s]+)[\s?] [NC]
+RewriteRule ^(.*[^/])$ %1/ [R=301,L,NE]
+
+# 8. Internally load .php file when clean extensionless URL is requested (e.g. /about loads about.php)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# 9. Fallback: internally load .html file if clean URL requested and .html exists
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.html -f
 RewriteRule ^(.*)$ $1.html [L]
