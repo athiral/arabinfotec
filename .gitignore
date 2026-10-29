@@ -1,0 +1,7 @@
+# Archives & Large Backups
+*.zip
+*.tar.gz
+*.bak
+
+# Local temporary files
+cookie.txt
