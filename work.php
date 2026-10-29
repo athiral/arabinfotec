@@ -51,7 +51,7 @@ require_once __DIR__ . '/includes/header.php';
                        <div class="project-image">
                             <img
                                 src="assets/valet.webp-01-1.webp"
-                                alt="Bayat Plaza website project"
+                                alt="varletpark App project"
                                 loading="lazy"
                                 width="1200"
                                 height="840"

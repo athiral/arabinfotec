@@ -22,7 +22,7 @@ require_once __DIR__ . '/../../includes/header.php';
     </a>
    </section>
    <section class="project-showcase wrap">
-    <img alt="Precise Medical Center website project" height="840" src="../../assets/advanced_perfect.jpg" width="1200"/>
+    <img alt="Advanced Perfect website project" height="840" src="../../assets/advanced_perfect.jpg" width="1200"/>
    </section>
    <section class="meet-band wrap">
     <div>
