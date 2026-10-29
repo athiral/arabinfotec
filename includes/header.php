@@ -33,7 +33,7 @@ $body_class = isset($body_class) ? $body_class : '';
   <link href="<?php echo $base_url; ?>motion.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>launch.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>scenes.css" rel="stylesheet"/>
-  <link href="<?php echo $base_url; ?>global.css" rel="stylesheet"/>
+  <link href="<?php echo $base_url; ?>global.css?v=2.9" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>leadership.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>product-work.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>solutions.css" rel="stylesheet"/>

@@ -7,6 +7,22 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();documen
 document.addEventListener('click',e=>{document.querySelectorAll('.nav-services[open]').forEach(x=>{if(!x.contains(e.target))x.removeAttribute('open');});});
 const service=document.querySelector('#service'),selected=new URLSearchParams(location.search).get('service');
 if(service&&selected&&[...service.options].some(x=>x.value===selected))service.value=selected;
+
+function parseSafeJson(raw){
+  if(!raw||typeof raw!=='string') return null;
+  try{ return JSON.parse(raw); }catch(e){}
+  const firstBrace=raw.indexOf('{');
+  const lastBrace=raw.lastIndexOf('}');
+  if(firstBrace!==-1&&lastBrace>firstBrace){
+    try{ return JSON.parse(raw.slice(firstBrace,lastBrace+1)); }catch(e){}
+  }
+  const match=raw.match(/\{[\s\S]*"success"[\s\S]*\}/);
+  if(match){
+    try{ return JSON.parse(match[0]); }catch(e){}
+  }
+  return null;
+}
+
 const form=document.querySelector('#brief-form');
 if(form){
   const loadedInput=form.querySelector('[name="form_loaded_at"]');
@@ -72,7 +88,8 @@ if(form){
         headers:{'X-Requested-With':'XMLHttpRequest'}
       });
 
-      const data=await response.json().catch(()=>null);
+      const rawText=await response.text();
+      const data=parseSafeJson(rawText);
 
       if(response.ok&&data&&data.success){
         if(status){
@@ -176,3 +193,237 @@ if(location.hash==='#software'){document.querySelector('[data-filter=software]')
 const demoSolution=new URLSearchParams(location.search).get('solution');
 const demoNames={'varletpark':'VarletPark','blueforceops':'BlueForceOps','capnav':'CapNav','parkora':'Parkora','parkora-marine':'Parkora Marine','crm-software':'CRM Software','shortlist-pro':'Shortlist Pro'};
 if(demoNames[demoSolution]&&document.querySelector('#message'))document.querySelector('#message').value='I would like a demonstration of '+demoNames[demoSolution]+'.\n\nOur requirements: ';
+
+// Brochure Download Modal Handler
+(function() {
+  const openBtn = document.querySelector('#open-brochure-modal');
+  const modal = document.querySelector('#brochure-modal');
+  const closeBtn = document.querySelector('#close-brochure-modal');
+  const backdrop = document.querySelector('#brochure-modal-backdrop');
+  const form = document.querySelector('#brochure-form');
+  const status = document.querySelector('#brochure-status');
+  const submitBtn = document.querySelector('#brochure-submit-btn');
+  const loadedAtInput = document.querySelector('#brochure-form-loaded-at');
+
+  if (!modal || !openBtn) return;
+
+  function openModal() {
+    modal.classList.add('is-active');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (loadedAtInput) loadedAtInput.value = String(Date.now());
+    setTimeout(() => {
+      const firstInput = modal.querySelector('#brochure-name');
+      if (firstInput) firstInput.focus();
+    }, 100);
+  }
+
+  function setFieldError(input, msg) {
+    if (!input) return;
+    const parent = input.closest('.brochure-field');
+    if (!parent) return;
+    parent.classList.add('has-error');
+    let errSpan = parent.querySelector('.brochure-field-error');
+    if (errSpan) {
+      errSpan.textContent = msg;
+    }
+  }
+
+  function clearFieldErrors() {
+    form.querySelectorAll('.brochure-field.has-error').forEach(field => {
+      field.classList.remove('has-error');
+      const errSpan = field.querySelector('.brochure-field-error');
+      if (errSpan) errSpan.textContent = '';
+    });
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-active');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    clearFieldErrors();
+  }
+
+  openBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal();
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) backdrop.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+      closeModal();
+    }
+  });
+
+  if (form) {
+    // Clear field errors as user types
+    form.querySelectorAll('input, textarea').forEach(input => {
+      input.addEventListener('input', () => {
+        const parent = input.closest('.brochure-field');
+        if (parent && parent.classList.contains('has-error')) {
+          parent.classList.remove('has-error');
+          const errSpan = parent.querySelector('.brochure-field-error');
+          if (errSpan) errSpan.textContent = '';
+        }
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearFieldErrors();
+
+      let isValid = true;
+      let firstInvalidInput = null;
+
+      // 1. Full Name check
+      const nameInput = form.querySelector('#brochure-name');
+      if (nameInput) {
+        const nameVal = nameInput.value.trim();
+        if (!nameVal) {
+          setFieldError(nameInput, 'Please enter your full name');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = nameInput;
+        }
+      }
+
+      // 2. Email Address check
+      const emailInput = form.querySelector('#brochure-email');
+      if (emailInput) {
+        const emailVal = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailVal) {
+          setFieldError(emailInput, 'Please enter your email address');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = emailInput;
+        } else if (!emailRegex.test(emailVal)) {
+          setFieldError(emailInput, 'Please enter a valid email address');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = emailInput;
+        }
+      }
+
+      // 3. Phone / WhatsApp check
+      const phoneInput = form.querySelector('#brochure-phone');
+      if (phoneInput) {
+        const phoneVal = phoneInput.value.trim();
+        const phoneRegex = /^\+?[0-9\s\-()]{7,20}$/;
+        if (phoneInput.hasAttribute('required') && !phoneVal) {
+          setFieldError(phoneInput, 'Please enter your phone number');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = phoneInput;
+        } else if (phoneVal && !phoneRegex.test(phoneVal)) {
+          setFieldError(phoneInput, 'Please enter a valid phone number');
+          isValid = false;
+          if (!firstInvalidInput) firstInvalidInput = phoneInput;
+        }
+      }
+
+      if (!isValid) {
+        if (firstInvalidInput) firstInvalidInput.focus();
+        return;
+      }
+
+      // Pre-open new tab during user gesture so browser popup blockers do not block it
+      let newTab = null;
+      try {
+        newTab = window.open('', '_blank');
+      } catch (err) {}
+
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Processing...</span>';
+      }
+      if (status) {
+        status.className = 'brochure-status';
+        status.textContent = 'Submitting details...';
+      }
+
+      try {
+        const formData = new FormData(form);
+        const actionUrl = form.getAttribute('action') || 'send-brochure.php';
+
+        const response = await fetch(actionUrl, {
+          method: 'POST',
+          body: formData,
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        const rawText = await response.text();
+        const data = parseSafeJson(rawText);
+
+        if (response.ok && data && data.success) {
+          const rawUrl = form.dataset.brochureUrl || (data && data.brochure_url) || '%231%20Arabinfotec%20Company%20Profile%202026%20-%202027.pdf';
+          let targetUrl = rawUrl;
+          try {
+            targetUrl = new URL(rawUrl, window.location.href).href;
+          } catch (e) {
+            targetUrl = rawUrl;
+          }
+
+          if (status) {
+            status.className = 'brochure-status success';
+            status.innerHTML = 'Thank you! Opening brochure in next tab...<br><a href="' + targetUrl + '" target="_blank" rel="noopener noreferrer" style="color:#7c3aed;text-decoration:underline;font-weight:600;font-size:12px;margin-top:6px;display:inline-block;">Click here if your browser blocked the new tab &nearrow;</a>';
+          }
+          if (submitBtn) {
+            submitBtn.innerHTML = '<span>Opening brochure...</span>';
+          }
+
+          // Open brochure in next tab
+          if (newTab && !newTab.closed) {
+            newTab.location.href = targetUrl;
+          } else {
+            const a = document.createElement('a');
+            a.href = targetUrl;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          }
+
+          setTimeout(() => {
+            closeModal();
+            form.reset();
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnHtml;
+            }
+            if (status) {
+              status.textContent = '';
+            }
+          }, 2500);
+        } else {
+          if (newTab && !newTab.closed) {
+            newTab.close();
+          }
+          const errMsg = (data && data.message) ? data.message : 'Submission failed. Please check your details and try again.';
+          if (status) {
+            status.className = 'brochure-status error';
+            status.textContent = errMsg;
+          }
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+          }
+        }
+      } catch (err) {
+        if (newTab && !newTab.closed) {
+          newTab.close();
+        }
+        console.error('Brochure submission error:', err);
+        if (status) {
+          status.className = 'brochure-status error';
+          status.textContent = 'An unexpected error occurred. Please try again.';
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
+      }
+    });
+  }
+})();

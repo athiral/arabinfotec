@@ -157,6 +157,10 @@ $base_url = isset($base_url) ? $base_url : '';
      <a class="group-link" href="https://virtualsysglobal.com/" target="_blank" rel="noopener">
       Part of Virtualsys Global Group
      </a>
+     <button type="button" class="brochure-download-btn" id="open-brochure-modal" aria-haspopup="dialog" aria-controls="brochure-modal">
+      <span>Download Our Brochure</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+     </button>
     </div>
     <div>
      <h3>
@@ -236,7 +240,72 @@ $base_url = isset($base_url) ? $base_url : '';
     </a>
    </div>
   </footer>
-  <script src="<?php echo $base_url; ?>app.js?v=2.4"></script>
+  <!-- Brochure Download Modal -->
+  <div class="brochure-modal-overlay" id="brochure-modal" aria-hidden="true" role="dialog" aria-labelledby="brochure-modal-title">
+   <div class="brochure-modal-backdrop" id="brochure-modal-backdrop"></div>
+   <div class="brochure-modal-card">
+    <button type="button" class="brochure-modal-close" id="close-brochure-modal" aria-label="Close modal">
+     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="brochure-modal-header">
+     <!-- <div class="brochure-badge">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+       <span>Company Profile 2026 - 2027</span>
+     </div> -->
+     <h3 id="brochure-modal-title">Download Our Brochure</h3>
+     <p>Please provide your contact details to download the official Arabinfotec company profile and service overview.</p>
+    </div>
+
+    <form id="brochure-form" class="brochure-form" method="POST" action="<?php echo $base_url; ?>send-brochure.php" data-brochure-url="<?php echo $base_url; ?>%231%20Arabinfotec%20Company%20Profile%202026%20-%202027.pdf" novalidate>
+     <!-- Honeypot -->
+     <div style="display:none;" aria-hidden="true">
+      <input type="text" name="hp_name" tabindex="-1" autocomplete="off" />
+      <input type="hidden" name="form_loaded_at" id="brochure-form-loaded-at" value="" />
+      <input type="hidden" name="brochure_url" value="<?php echo $base_url; ?>%231%20Arabinfotec%20Company%20Profile%202026%20-%202027.pdf" />
+     </div>
+
+     <div class="brochure-form-grid">
+      <div class="brochure-field">
+       <label for="brochure-name">Your Full Name <span class="required">*</span></label>
+       <input type="text" id="brochure-name" name="name" placeholder="e.g. John Doe" required autocomplete="name" />
+       <span class="brochure-field-error" id="error-brochure-name"></span>
+      </div>
+
+      <div class="brochure-field">
+       <label for="brochure-email">Email Address <span class="required">*</span></label>
+       <input type="email" id="brochure-email" name="email" placeholder="e.g. john@company.com" required autocomplete="email" />
+       <span class="brochure-field-error" id="error-brochure-email"></span>
+      </div>
+
+      <div class="brochure-field">
+       <label for="brochure-phone">Phone / WhatsApp </label>
+       <input type="tel" id="brochure-phone" name="phone" placeholder="e.g. +971 50 123 4567" autocomplete="tel" />
+       <span class="brochure-field-error" id="error-brochure-phone"></span>
+      </div>
+
+      <div class="brochure-field">
+       <label for="brochure-company">Company Name</label>
+       <input type="text" id="brochure-company" name="company" placeholder="e.g. ACME Corp" autocomplete="organization" />
+      </div>
+     </div>
+
+     <div class="brochure-field full-width">
+      <label for="brochure-message">Project Requirements / Notes <span class="optional">(Optional)</span></label>
+      <textarea id="brochure-message" name="message" rows="2" placeholder="Tell us briefly about your interest or requirements..."></textarea>
+     </div>
+
+     <div class="brochure-form-actions">
+      <button type="submit" class="brochure-submit-btn" id="brochure-submit-btn">
+       <span>Download Company Profile</span>
+       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
+     </div>
+
+     <div class="brochure-status" id="brochure-status" role="status" aria-live="polite"></div>
+    </form>
+   </div>
+  </div>
+  <script src="<?php echo $base_url; ?>app.js?v=3.3"></script>
   <?php if (!empty($extra_scripts)) echo $extra_scripts; ?>
  </body>
 </html>
