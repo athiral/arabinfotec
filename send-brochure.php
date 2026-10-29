@@ -81,6 +81,8 @@ function sanitizeHtml(string $v = ''): string {
     return htmlspecialchars($v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+define('RECAPTCHA_SECRET', '6LcCZQYuAAAAAN7hTKCg2UR4J8S_KOnBHl26JMS2');
+
 // 1. Check Request Method
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     jsonResponse(false, 'Invalid request method.', '', 405);
@@ -141,6 +143,40 @@ if (!$phone) {
 
 if (!$company) {
     $company = 'Not provided';
+}
+
+// 6.5 reCAPTCHA v2 Check
+$recaptcha_token = $_POST['g-recaptcha-response'] ?? $_POST['recaptcha_token'] ?? '';
+$captchaVerified = false;
+
+if ($recaptcha_token) {
+    $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POSTFIELDS     => http_build_query([
+            'secret'   => RECAPTCHA_SECRET,
+            'response' => $recaptcha_token
+        ]),
+        CURLOPT_TIMEOUT        => 5,
+        CURLOPT_SSL_VERIFYPEER => false
+    ]);
+    $captchaResponse = curl_exec($ch);
+    curl_close($ch);
+
+    if ($captchaResponse) {
+        $captcha = json_decode($captchaResponse, true);
+        if (!empty($captcha['success'])) {
+            $captchaVerified = true;
+        }
+    }
+}
+
+if (!$captchaVerified && !$isLocal) {
+    if (!$recaptcha_token) {
+        jsonResponse(false, 'Please verify that you are not a robot.', '', 400);
+    }
+    jsonResponse(false, 'Captcha verification failed. Please try again.', '', 400);
 }
 
 // Rate Limiting (IP + Phone)

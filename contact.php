@@ -74,6 +74,8 @@ require_once __DIR__ . '/includes/header.php';
             <textarea id="message" name="message" rows="4" placeholder="What would you like to create or improve?" maxlength="2000"></textarea>
           </label>
 
+          <div class="g-recaptcha" data-sitekey="6LcCZQYuAAAAAHFKJV_GCiQ_ilGN7hGUOPWwwnQy" style="margin: 18px 0 12px;"></div>
+
           <div class="form-buttons">
             <button class="button" type="submit" id="submit-btn">Send Enquiry <span>↗</span></button>
             <a class="button secondary" href="https://wa.me/971543697999" rel="noopener" target="_blank" style="text-align:center;text-decoration:none;">

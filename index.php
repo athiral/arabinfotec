@@ -553,6 +553,7 @@ require_once __DIR__ . '/includes/header.php';
        A little about your project
        <textarea id="message" maxlength="2000" name="message" placeholder="What would you like to create or improve?" rows="4"></textarea>
       </label>
+      <div class="g-recaptcha" data-sitekey="6LcCZQYuAAAAAHFKJV_GCiQ_ilGN7hGUOPWwwnQy" style="margin: 18px 0 12px;"></div>
       <div class="form-buttons">
        <button class="button" id="submit-btn" type="submit">
         Send Enquiry

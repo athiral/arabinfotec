@@ -76,7 +76,7 @@ if ($origin && !in_array($origin, $allowedOrigins, true) && !$isLocal) {
 /* =========================================================
    CONFIG (MOVE TO ENV IN REAL DEPLOYMENT)
 ========================================================= */
-define('RECAPTCHA_SECRET', '6Le2RQMuAAAAAHkAq99MrkrB7Qt1I1sjpgfe5tZB');
+define('RECAPTCHA_SECRET', '6LcCZQYuAAAAAN7hTKCg2UR4J8S_KOnBHl26JMS2');
 
 define('SMTP_HOST', 'ded6951.inmotionhosting.com');
 define('SMTP_USER', 'mailer@arabinfotec.com');
@@ -168,11 +168,7 @@ if ($recaptcha_token) {
 
     if ($captchaResponse) {
         $captcha = json_decode($captchaResponse, true);
-        if (
-            !empty($captcha['success']) &&
-            ($captcha['score'] ?? 0) >= 0.3 &&
-            ($captcha['action'] ?? '') === 'submit'
-        ) {
+        if (!empty($captcha['success'])) {
             $captchaVerified = true;
         }
     }

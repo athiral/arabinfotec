@@ -311,6 +311,10 @@ $base_url = isset($base_url) ? $base_url : '';
       <textarea id="brochure-message" name="message" rows="2" placeholder="Tell us briefly about your interest or requirements..."></textarea>
      </div>
 
+     <div class="brochure-field full-width" style="margin-top: 14px; margin-bottom: 8px; display: flex; justify-content: center; overflow-x: auto;">
+      <div class="g-recaptcha" data-sitekey="6LcCZQYuAAAAAHFKJV_GCiQ_ilGN7hGUOPWwwnQy"></div>
+     </div>
+
      <div class="brochure-form-actions">
       <button type="submit" class="brochure-submit-btn" id="brochure-submit-btn">
        <span>Download Company Profile</span>
@@ -322,7 +326,7 @@ $base_url = isset($base_url) ? $base_url : '';
     </form>
    </div>
   </div>
-  <script src="<?php echo $base_url; ?>app.js?v=3.5"></script>
+  <script src="<?php echo $base_url; ?>app.js?v=3.7"></script>
   <?php if (!empty($extra_scripts)) echo $extra_scripts; ?>
  </body>
 </html>

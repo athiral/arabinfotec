@@ -42,6 +42,20 @@ if(form){
 
     const status=document.querySelector('#form-status');
     const submitBtn=form.querySelector('#submit-btn')||form.querySelector('button[type="submit"]');
+
+    let recaptchaToken='';
+    if(typeof grecaptcha!=='undefined'&&grecaptcha.getResponse){
+      recaptchaToken=grecaptcha.getResponse();
+    }
+
+    if(!recaptchaToken){
+      if(status){
+        status.style.color='#dc2626';
+        status.textContent='Please check the "I am not a robot" box before submitting.';
+      }
+      return;
+    }
+
     const originalBtnText=submitBtn?submitBtn.innerHTML:'Send Enquiry <span>↗</span>';
 
     if(submitBtn){
@@ -54,32 +68,8 @@ if(form){
     }
 
     try{
-      const SITE_KEY='6Le2RQMuAAAAALLD-lL1Wbb_GkYKLtK81bg848m3';
-      let recaptchaToken='';
-      if(typeof grecaptcha!=='undefined'&&grecaptcha.execute){
-        try{
-          recaptchaToken=await new Promise(resolve=>{
-            const timer=setTimeout(()=>resolve(''),1500);
-            grecaptcha.ready(async()=>{
-              try{
-                const t=await grecaptcha.execute(SITE_KEY,{action:'submit'});
-                clearTimeout(timer);
-                resolve(t||'');
-              }catch(ex){
-                clearTimeout(timer);
-                resolve('');
-              }
-            });
-          });
-        }catch(err){
-          console.warn('reCAPTCHA error:',err);
-        }
-      }
-
       const f=new FormData(form);
-      if(recaptchaToken){
-        f.set('recaptcha_token',recaptchaToken);
-      }
+      f.set('recaptcha_token',recaptchaToken);
 
       const actionUrl=form.getAttribute('action')||'send-inquiry.php';
       const response=await fetch(actionUrl,{
@@ -96,6 +86,9 @@ if(form){
           status.style.color='#16a34a';
           status.textContent=data.message||'Thanks — redirecting...';
         }
+        if(typeof grecaptcha!=='undefined'&&grecaptcha.reset){
+          grecaptcha.reset();
+        }
         setTimeout(()=>{
           window.location.href='thankyou';
         },300);
@@ -109,6 +102,9 @@ if(form){
           submitBtn.disabled=false;
           submitBtn.innerHTML=originalBtnText;
         }
+        if(typeof grecaptcha!=='undefined'&&grecaptcha.reset){
+          grecaptcha.reset();
+        }
       }
     }catch(err){
       console.error('Submission error:',err);
@@ -119,6 +115,9 @@ if(form){
       if(submitBtn){
         submitBtn.disabled=false;
         submitBtn.innerHTML=originalBtnText;
+      }
+      if(typeof grecaptcha!=='undefined'&&grecaptcha.reset){
+        grecaptcha.reset();
       }
     }
   });
@@ -326,6 +325,16 @@ if(demoNames[demoSolution]&&document.querySelector('#message'))document.querySel
         return;
       }
 
+      // 4. reCAPTCHA check
+      const recaptchaToken = form.querySelector('[name="g-recaptcha-response"]')?.value || '';
+      if (!recaptchaToken) {
+        if (status) {
+          status.className = 'brochure-status error';
+          status.textContent = 'Please check the "I am not a robot" box before downloading.';
+        }
+        return;
+      }
+
       // Pre-open new tab during user gesture so browser popup blockers do not block it
       let newTab = null;
       try {
@@ -429,6 +438,10 @@ p{font-size:13.5px;color:#94a3b8;line-height:1.5}
             newTab.close();
           }
           const errMsg = (data && data.message) ? data.message : 'Submission failed. Please check your details and try again.';
+          if (typeof grecaptcha !== 'undefined' && grecaptcha.reset) {
+            try { grecaptcha.reset(0); } catch (e) {}
+            try { grecaptcha.reset(1); } catch (e) {}
+          }
           if (status) {
             status.className = 'brochure-status error';
             status.textContent = errMsg;

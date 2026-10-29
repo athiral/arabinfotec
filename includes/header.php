@@ -48,7 +48,7 @@ $body_class = isset($body_class) ? $body_class : '';
   <link href="<?php echo $base_url; ?>leadership.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>product-work.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>solutions.css" rel="stylesheet"/>
-  <script src="https://www.google.com/recaptcha/api.js?render=6Le2RQMuAAAAALLD-lL1Wbb_GkYKLtK81bg848m3"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <?php if (!empty($extra_head)) echo $extra_head; ?>
 
   <!-- Google Tag Manager -->
