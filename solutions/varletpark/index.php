@@ -37,30 +37,19 @@ require_once __DIR__ . '/../../includes/header.php';
                             </div>
                         </div>
                         <div class="solution-visual">
-                            <div class="product-art" style="--product-color: #603fd0">
-                                <div class="product-window">
-                                    <div class="product-window-bar"><i></i><i></i><i></i><b>VarletPark</b></div>
-                                    <div class="product-window-body">
-                                        <aside><b>V</b><i></i><i></i><i></i></aside>
-                                        <div>
-                                            <small>WORKSPACE OVERVIEW</small>
-                                            <h3>Vehicle check-in</h3>
-                                            <div class="preview-stats">
-                                                <span>Overview<b>•••</b></span
-                                                ><span>Activity<b>↗</b></span
-                                                ><span>Workspace<b>✓</b></span>
-                                            </div>
-                                            <div class="preview-rows">
-                                                <div><i></i><span>Vehicle check-in</span><b>→</b></div>
-                                                <div><i></i><span>Parking allocation</span><b>→</b></div>
-                                                <div><i></i><span>Retrieval queue</span><b>→</b></div>
-                                                <div><i></i><span>Ready for collection</span><b>→</b></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="preview-disclosure">ILLUSTRATIVE PREVIEW · NOT A PRODUCT SCREENSHOT</span>
+
+                        
+                      <div class="product-art real-product-art" style="--product-color: #196aaf">
+                                <img
+                                    src="../../assets/valet.jpg"
+                                    alt="varletpark — official product website visual"
+                                    loading="lazy"
+                                    width="1200"
+                                    height="840"/>
                             </div>
+
+
+
                         </div>
                     </div>
                 </section>

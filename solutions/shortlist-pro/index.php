@@ -7,12 +7,20 @@ $body_data_page = 'solution-shortlist-pro';
 require_once __DIR__ . '/../../includes/header.php';
 ?>
 
-            <div class="solution-page" style="--solution: #a36828">
+            <div class="solution-page" style="--solution: #47b691">
                 <section class="solution-hero">
                     <div class="wrap solution-hero-grid">
                         <div>
                             <a class="text-link" href="../../solutions">← All solutions</a>
-                            <div class="solution-brand-box"><span class="solution-wordmark">Shortlist Pro</span></div>
+                            
+                                <div class="solution-brand-box">
+                                <img
+                                    class="solution-brand"
+                                    src="../../assets/shortlistpro.png"
+                                    alt="shortlistpro logo"
+                                />
+                            </div>
+
                             <p class="eyebrow">RECRUITMENT WORKFLOWS</p>
                             <h1>Bring clarity to the recruitment journey.</h1>
                             <p>A dedicated space for our recruitment software work.</p>
@@ -29,30 +37,18 @@ require_once __DIR__ . '/../../includes/header.php';
                             </p>
                         </div>
                         <div class="solution-visual">
-                            <div class="product-art" style="--product-color: #a36828">
-                                <div class="product-window">
-                                    <div class="product-window-bar"><i></i><i></i><i></i><b>Shortlist Pro</b></div>
-                                    <div class="product-window-body">
-                                        <aside><b>S</b><i></i><i></i><i></i></aside>
-                                        <div>
-                                            <small>WORKSPACE OVERVIEW</small>
-                                            <h3>Candidate workspace</h3>
-                                            <div class="preview-stats">
-                                                <span>Overview<b>•••</b></span
-                                                ><span>Activity<b>↗</b></span
-                                                ><span>Workspace<b>✓</b></span>
-                                            </div>
-                                            <div class="preview-rows">
-                                                <div><i></i><span>Candidate workspace</span><b>→</b></div>
-                                                <div><i></i><span>Review stages</span><b>→</b></div>
-                                                <div><i></i><span>Shortlist view</span><b>→</b></div>
-                                                <div><i></i><span>Team review</span><b>→</b></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="preview-disclosure">ILLUSTRATIVE PREVIEW · NOT A PRODUCT SCREENSHOT</span>
+
+
+                             <div class="product-art real-product-art" style="--product-color: #196aaf">
+                                <img
+                                    src="../../assets/shortlist_pro.jpg"
+                                    alt="shortlist_pro — official product website visual"
+                                    loading="lazy"
+                                    width="1200"
+                                    height="840"/>
                             </div>
+
+                            
                         </div>
                     </div>
                 </section>
