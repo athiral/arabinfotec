@@ -330,6 +330,34 @@ if(demoNames[demoSolution]&&document.querySelector('#message'))document.querySel
       let newTab = null;
       try {
         newTab = window.open('', '_blank');
+        if (newTab && newTab.document) {
+          newTab.document.title = 'Opening Brochure | Arabinfotec';
+          newTab.document.write(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opening Arabinfotec Brochure...</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0e0817;color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.loader-card{background:linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:36px 30px;max-width:420px;width:100%;box-shadow:0 24px 48px rgba(0,0,0,0.5)}
+.spinner{width:44px;height:44px;border:3px solid rgba(168,85,247,0.2);border-top-color:#a855f7;border-radius:50%;margin:0 auto 20px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+h2{font-size:19px;font-weight:600;margin-bottom:8px;color:#ffffff;letter-spacing:-0.2px}
+p{font-size:13.5px;color:#94a3b8;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="loader-card">
+  <div class="spinner"></div>
+  <h2>Opening Arabinfotec Brochure</h2>
+  <p>Please wait a moment while your company profile loads...</p>
+</div>
+</body>
+</html>`);
+          newTab.document.close();
+        }
       } catch (err) {}
 
       const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
@@ -356,7 +384,7 @@ if(demoNames[demoSolution]&&document.querySelector('#message'))document.querySel
         const data = parseSafeJson(rawText);
 
         if (response.ok && data && data.success) {
-          const rawUrl = (data && data.brochure_url) || form.dataset.downloadUrl || 'download-brochure.php';
+          const rawUrl = (data && data.brochure_url) || form.dataset.downloadUrl || 'downloads/ait-brochure';
           let targetUrl = rawUrl;
           try {
             targetUrl = new URL(rawUrl, window.location.href).href;

@@ -102,7 +102,7 @@ if ($origin && !in_array($origin, $allowedOrigins, true) && !$isLocal) {
 
 // Brochure filename & secure delivery URL
 $brochureFileName = '#1 Arabinfotec Company Profile 2026 - 2027.pdf';
-$downloadEndpoint = !empty($_POST['download_url']) ? cleanInput($_POST['download_url']) : 'download-brochure.php';
+$downloadEndpoint = !empty($_POST['download_url']) ? cleanInput($_POST['download_url']) : 'downloads/ait-brochure';
 
 // 3. Honeypot Check (do not set session)
 if (!empty($_POST['hp_name'] ?? '')) {
@@ -154,13 +154,47 @@ if (
 ) {
     $_SESSION['brochure_access']  = true;
     $_SESSION['brochure_expires'] = time() + 600;
+    session_write_close();
     jsonResponse(true, 'Thank you! Redirecting to brochure...', $downloadEndpoint);
 }
 
 @touch($ipFile);
 @touch($phoneFile);
 
-// 7. Email Dispatch (PHPMailer)
+// Grant brochure session access & release session lock immediately
+$_SESSION['brochure_access']  = true;
+$_SESSION['brochure_expires'] = time() + 600;
+session_write_close();
+
+// Fast async flush to client so brochure opens immediately without waiting for SMTP
+ignore_user_abort(true);
+set_time_limit(60);
+
+$responsePayload = json_encode([
+    'success'      => true,
+    'message'      => 'Thank you! Redirecting to brochure...',
+    'brochure_url' => $downloadEndpoint
+]);
+
+if (!headers_sent()) {
+    http_response_code(200);
+    header('Content-Type: application/json; charset=utf-8');
+    header('X-Content-Type-Options: nosniff');
+    header('Connection: close');
+    header('Content-Length: ' . strlen($responsePayload));
+}
+
+while (ob_get_level() > 0) {
+    ob_end_clean();
+}
+echo $responsePayload;
+flush();
+
+if (function_exists('fastcgi_finish_request')) {
+    fastcgi_finish_request();
+}
+
+// 7. Email Dispatch (PHPMailer) - runs in background
 define('PRIMARY_RECIPIENT', 'hello@arabinfotec.com');
 
 // CC recipients: athira@virtualsystechnologies.com
@@ -297,8 +331,5 @@ try {
     error_log('Brochure notification mail error: ' . $e->getMessage());
 }
 
-// 8. Grant brochure session access (valid for 10 minutes) and return response
-$_SESSION['brochure_access']  = true;
-$_SESSION['brochure_expires'] = time() + 600;
-
-jsonResponse(true, 'Thank you! Redirecting to brochure...', $downloadEndpoint);
+// Response already sent via fast async flush above
+exit;

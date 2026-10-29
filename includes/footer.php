@@ -273,12 +273,12 @@ $base_url = isset($base_url) ? $base_url : '';
      <p>Please provide your contact details to download the official Arabinfotec company profile and service overview.</p>
     </div>
 
-    <form id="brochure-form" class="brochure-form" method="POST" action="<?php echo $base_url; ?>send-brochure.php" data-download-url="<?php echo $base_url; ?>download-brochure.php" novalidate>
+    <form id="brochure-form" class="brochure-form" method="POST" action="<?php echo $base_url; ?>send-brochure.php" data-download-url="<?php echo $base_url; ?>downloads/ait-brochure" novalidate>
      <!-- Honeypot & Security -->
      <div style="display:none;" aria-hidden="true">
       <input type="text" name="hp_name" tabindex="-1" autocomplete="off" />
       <input type="hidden" name="form_loaded_at" id="brochure-form-loaded-at" value="" />
-      <input type="hidden" name="download_url" value="<?php echo $base_url; ?>download-brochure.php" />
+      <input type="hidden" name="download_url" value="<?php echo $base_url; ?>downloads/ait-brochure" />
      </div>
 
      <div class="brochure-form-grid">
@@ -322,7 +322,7 @@ $base_url = isset($base_url) ? $base_url : '';
     </form>
    </div>
   </div>
-  <script src="<?php echo $base_url; ?>app.js?v=3.4"></script>
+  <script src="<?php echo $base_url; ?>app.js?v=3.5"></script>
   <?php if (!empty($extra_scripts)) echo $extra_scripts; ?>
  </body>
 </html>

@@ -26,7 +26,9 @@ $isExpired = isset($_SESSION['brochure_expires']) && time() > $_SESSION['brochur
 if (!$hasAccess || $isExpired) {
     // Unauthorized access: direct link copy, incognito, or expired session
     http_response_code(403);
-    header('Location: index.php?brochure=unauthorized');
+    $baseDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+    $redirectUrl = ($baseDir !== '' ? $baseDir : '') . '/?brochure=unauthorized';
+    header('Location: ' . $redirectUrl);
     exit('Access denied. Please submit the brochure request form first.');
 }
 

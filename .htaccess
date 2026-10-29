@@ -32,6 +32,12 @@ RewriteCond %{THE_REQUEST} \s+([^?\s]+)\.html[\s?] [NC]
 RewriteCond %{REQUEST_URI} !index\.html$ [NC]
 RewriteRule ^(.*)\.html$ %1 [R=301,L,NE]
 
+# Redirect direct request for download-brochure.php or download-brochure to /downloads/ait-brochure
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{THE_REQUEST} \s+([^?\s]*)/download-brochure(?:\.php)?[\s?] [NC]
+RewriteRule ^(.*)download-brochure(?:\.php)?$ %1/downloads/ait-brochure [R=301,L,NE]
+
+
 # 4. Redirect direct requests for .php to clean URL (removes .php from browser address bar)
 # Explicitly exclude POST requests, send-inquiry.php, and send-enquiry.php so contact form is never affected
 RewriteCond %{REQUEST_METHOD} !POST
@@ -50,6 +56,9 @@ RewriteRule ^(.+)/$ %1 [R=301,L,NE]
 
 # 6. Special case: /solutions and /solutions/ load solutions.php
 RewriteRule ^solutions/?$ solutions.php [L]
+
+# Special case: /downloads/ait-brochure loads download-brochure.php
+RewriteRule ^downloads/ait-brochure/?$ download-brochure.php [L,QSA]
 
 # 7. Add trailing slash to any real subdirectories (e.g. projects/bayatplaza -> projects/bayatplaza/)
 RewriteCond %{REQUEST_FILENAME} -d
