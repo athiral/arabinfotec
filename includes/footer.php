@@ -256,12 +256,12 @@ $base_url = isset($base_url) ? $base_url : '';
      <p>Please provide your contact details to download the official Arabinfotec company profile and service overview.</p>
     </div>
 
-    <form id="brochure-form" class="brochure-form" method="POST" action="<?php echo $base_url; ?>send-brochure.php" data-brochure-url="<?php echo $base_url; ?>%231%20Arabinfotec%20Company%20Profile%202026%20-%202027.pdf" novalidate>
-     <!-- Honeypot -->
+    <form id="brochure-form" class="brochure-form" method="POST" action="<?php echo $base_url; ?>send-brochure.php" data-download-url="<?php echo $base_url; ?>download-brochure.php" novalidate>
+     <!-- Honeypot & Security -->
      <div style="display:none;" aria-hidden="true">
       <input type="text" name="hp_name" tabindex="-1" autocomplete="off" />
       <input type="hidden" name="form_loaded_at" id="brochure-form-loaded-at" value="" />
-      <input type="hidden" name="brochure_url" value="<?php echo $base_url; ?>%231%20Arabinfotec%20Company%20Profile%202026%20-%202027.pdf" />
+      <input type="hidden" name="download_url" value="<?php echo $base_url; ?>download-brochure.php" />
      </div>
 
      <div class="brochure-form-grid">

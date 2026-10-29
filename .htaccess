@@ -39,6 +39,7 @@ RewriteCond %{THE_REQUEST} \s+([^?\s]+)\.php[\s?] [NC]
 RewriteCond %{REQUEST_URI} !send-inquiry\.php$ [NC]
 RewriteCond %{REQUEST_URI} !send-enquiry\.php$ [NC]
 RewriteCond %{REQUEST_URI} !send-brochure\.php$ [NC]
+RewriteCond %{REQUEST_URI} !download-brochure\.php$ [NC]
 RewriteCond %{REQUEST_URI} !index\.php$ [NC]
 RewriteRule ^(.*)\.php$ %1 [R=301,L,NE]
 

@@ -7,6 +7,20 @@
  * - No CRM connection
  * - Returns brochure download URL
  */
+// Start session to authorize brochure access
+if (session_status() === PHP_SESSION_NONE) {
+    $cookieParams = session_get_cookie_params();
+    session_set_cookie_params([
+        'lifetime' => $cookieParams['lifetime'],
+        'path'     => '/',
+        'domain'   => $cookieParams['domain'],
+        'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+    session_start();
+}
+
 while (ob_get_level() > 0) {
     @ob_end_clean();
 }
@@ -86,14 +100,13 @@ if ($origin && !in_array($origin, $allowedOrigins, true) && !$isLocal) {
     jsonResponse(false, 'Forbidden origin.', '', 403);
 }
 
-// Brochure filename & URL
-$brochureFileName   = '#1 Arabinfotec Company Profile 2026 - 2027.pdf';
-$defaultBrochureUrl = '%231%20Arabinfotec%20Company%20Profile%202026%20-%202027.pdf';
-$brochureEncodedUrl = !empty($_POST['brochure_url']) ? cleanInput($_POST['brochure_url']) : $defaultBrochureUrl;
+// Brochure filename & secure delivery URL
+$brochureFileName = '#1 Arabinfotec Company Profile 2026 - 2027.pdf';
+$downloadEndpoint = !empty($_POST['download_url']) ? cleanInput($_POST['download_url']) : 'download-brochure.php';
 
-// 3. Honeypot Check
+// 3. Honeypot Check (do not set session)
 if (!empty($_POST['hp_name'] ?? '')) {
-    jsonResponse(true, 'Thank you! Redirecting to brochure...', $brochureEncodedUrl);
+    jsonResponse(true, 'Thank you! Redirecting to brochure...', $downloadEndpoint);
 }
 
 // 4. Timing Check (bot deterrent)
@@ -139,7 +152,9 @@ if (
     (file_exists($ipFile) && time() - filemtime($ipFile) < 10) ||
     (file_exists($phoneFile) && time() - filemtime($phoneFile) < 30)
 ) {
-    jsonResponse(true, 'Thank you! Redirecting to brochure...', $brochureEncodedUrl);
+    $_SESSION['brochure_access']  = true;
+    $_SESSION['brochure_expires'] = time() + 600;
+    jsonResponse(true, 'Thank you! Redirecting to brochure...', $downloadEndpoint);
 }
 
 @touch($ipFile);
@@ -150,13 +165,13 @@ define('PRIMARY_RECIPIENT', 'hello@arabinfotec.com');
 
 // CC recipients: athira@virtualsystechnologies.com
 define('CC_EMAILS', [
-    'athira@virtualsystechnologies.com'
+    'athira@virtualsystechnologies.com',
     // Optional affiliate recipients:
-    // 'info@arabinfotechllc.com',
-    // 'sreechand@arabinfotechllc.com',
-    // 'sreechand@vstbiz.com',
-    // 'sangeeta@vstbiz.com',
-    // 'praveen@vstbiz.com'
+    'info@arabinfotechllc.com',
+    'sreechand@arabinfotechllc.com',
+     'sreechand@vstbiz.com',
+     'sangeeta@vstbiz.com',
+     'praveen@vstbiz.com'
 ]);
 
 define('SMTP_HOST', 'ded6951.inmotionhosting.com');
@@ -282,5 +297,8 @@ try {
     error_log('Brochure notification mail error: ' . $e->getMessage());
 }
 
-// 8. Return success response with brochure URL
-jsonResponse(true, 'Thank you! Redirecting to brochure...', $brochureEncodedUrl);
+// 8. Grant brochure session access (valid for 10 minutes) and return response
+$_SESSION['brochure_access']  = true;
+$_SESSION['brochure_expires'] = time() + 600;
+
+jsonResponse(true, 'Thank you! Redirecting to brochure...', $downloadEndpoint);

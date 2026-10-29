@@ -356,7 +356,7 @@ if(demoNames[demoSolution]&&document.querySelector('#message'))document.querySel
         const data = parseSafeJson(rawText);
 
         if (response.ok && data && data.success) {
-          const rawUrl = form.dataset.brochureUrl || (data && data.brochure_url) || '%231%20Arabinfotec%20Company%20Profile%202026%20-%202027.pdf';
+          const rawUrl = (data && data.brochure_url) || form.dataset.downloadUrl || 'download-brochure.php';
           let targetUrl = rawUrl;
           try {
             targetUrl = new URL(rawUrl, window.location.href).href;
