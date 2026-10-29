@@ -1,3 +1,21 @@
+# Suppress PHP error display on production (mod_php, mod_php7, mod_php8, and mod_lsapi)
+<IfModule mod_php.c>
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+</IfModule>
+<IfModule lsapi_module>
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+</IfModule>
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 DirectorySlash Off

@@ -1,4 +1,15 @@
 <?php
+// Suppress PHP error display on frontend
+@ini_set('display_errors', '0');
+@ini_set('display_startup_errors', '0');
+@error_reporting(0);
+
+// Clean any pre-existing startup warnings
+while (ob_get_level() > 0) {
+    @ob_end_clean();
+}
+ob_start();
+
 /**
  * Common Header for Arabinfotec
  *

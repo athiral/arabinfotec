@@ -427,3 +427,53 @@ if(demoNames[demoSolution]&&document.querySelector('#message'))document.querySel
     });
   }
 })();
+
+// Clean server-emitted PHP startup warnings from DOM
+(function cleanPhpStartupWarnings() {
+  function removeServerWarnings() {
+    try {
+      // 1. Remove <b> tags mentioning Warning and imagick
+      const bTags = document.querySelectorAll('b');
+      bTags.forEach(b => {
+        const text = (b.textContent || '');
+        if (text.includes('Warning')) {
+          const parent = b.parentElement || document.body;
+          const contextText = (parent ? parent.textContent : '') + (b.nextSibling ? b.nextSibling.textContent : '');
+          if (contextText.includes('imagick') && contextText.includes('already loaded')) {
+            let prev = b.previousSibling;
+            while (prev && (prev.nodeName === 'BR' || (prev.nodeType === 3 && !prev.textContent.trim()))) {
+              const toRemove = prev;
+              prev = prev.previousSibling;
+              toRemove.remove();
+            }
+            let next = b.nextSibling;
+            while (next && (next.nodeName === 'BR' || next.nodeType === 3)) {
+              const toRemove = next;
+              next = next.nextSibling;
+              toRemove.remove();
+            }
+            b.remove();
+          }
+        }
+      });
+
+      // 2. Remove raw text nodes from body and html
+      [document.body, document.documentElement].forEach(container => {
+        if (!container) return;
+        Array.from(container.childNodes).forEach(node => {
+          if (node && node.nodeType === 3 && node.nodeValue && node.nodeValue.includes('imagick') && node.nodeValue.includes('already loaded')) {
+            node.remove();
+          }
+        });
+      });
+    } catch (e) {}
+  }
+
+  removeServerWarnings();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', removeServerWarnings);
+  }
+  window.addEventListener('load', removeServerWarnings);
+  setTimeout(removeServerWarnings, 50);
+  setTimeout(removeServerWarnings, 250);
+})();

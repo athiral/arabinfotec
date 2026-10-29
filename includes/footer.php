@@ -305,7 +305,14 @@ $base_url = isset($base_url) ? $base_url : '';
     </form>
    </div>
   </div>
-  <script src="<?php echo $base_url; ?>app.js?v=3.3"></script>
+  <script src="<?php echo $base_url; ?>app.js?v=3.4"></script>
   <?php if (!empty($extra_scripts)) echo $extra_scripts; ?>
  </body>
 </html>
+<?php
+if (ob_get_level() > 0) {
+    $cleanOutput = ob_get_clean();
+    $cleanOutput = preg_replace('/(<br\s*\/?>)?\s*<b>Warning<\/b>:\s*Module\s+"imagick"[^<]*?(line\s*<b>0<\/b>|<br\s*\/?>)?/i', '', $cleanOutput);
+    echo $cleanOutput;
+}
+?>

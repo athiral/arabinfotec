@@ -76,7 +76,13 @@ require_once __DIR__ . '/includes/header.php';
 
           <div class="form-buttons">
             <button class="button" type="submit" id="submit-btn">Send Enquiry <span>↗</span></button>
-          </div>
+            <a class="button secondary" href="https://wa.me/971543697999" rel="noopener" target="_blank" style="text-align:center;text-decoration:none;">
+        Chat on WhatsApp
+        <span>
+         &nearrow;
+        </span>
+       </a>
+          </div>   
           <p class="form-note">Your enquiry is sent securely to our team. We'll get back to you shortly.</p>
           <p id="form-status" role="status" aria-live="polite"></p>
         </form>
