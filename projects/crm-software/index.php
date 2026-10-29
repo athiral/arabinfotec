@@ -26,109 +26,13 @@ require_once __DIR__ . '/../../includes/header.php';
      </a>
     </div>
    </section>
-   <section class="wrap product-detail-art">
-    <div class="product-art" style="--product-color:#7655ad">
-     <div class="product-window">
-      <div class="product-window-bar">
-       <i>
-       </i>
-       <i>
-       </i>
-       <i>
-       </i>
-       <b>
-        CRM Software
-       </b>
-      </div>
-      <div class="product-window-body">
-       <aside>
-        <b>
-         C
-        </b>
-        <i>
-        </i>
-        <i>
-        </i>
-        <i>
-        </i>
-       </aside>
-       <div>
-        <small>
-         WORKSPACE OVERVIEW
-        </small>
-        <h3>
-         New enquiries
-        </h3>
-        <div class="preview-stats">
-         <span>
-          Overview
-          <b>
-           &bull;&bull;&bull;
-          </b>
-         </span>
-         <span>
-          Activity
-          <b>
-           &nearrow;
-          </b>
-         </span>
-         <span>
-          Workspace
-          <b>
-           &checkmark;
-          </b>
-         </span>
-        </div>
-        <div class="preview-rows">
-         <div>
-          <i>
-          </i>
-          <span>
-           New enquiries
-          </span>
-          <b>
-           &rarr;
-          </b>
-         </div>
-         <div>
-          <i>
-          </i>
-          <span>
-           Follow-up workspace
-          </span>
-          <b>
-           &rarr;
-          </b>
-         </div>
-         <div>
-          <i>
-          </i>
-          <span>
-           Customer activity
-          </span>
-          <b>
-           &rarr;
-          </b>
-         </div>
-         <div>
-          <i>
-          </i>
-          <span>
-           Sales overview
-          </span>
-          <b>
-           &rarr;
-          </b>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-     <span class="preview-disclosure">
-      ILLUSTRATIVE PREVIEW &middot; NOT A PRODUCT SCREENSHOT
-     </span>
-    </div>
+  
+
+   <section class="project-showcase wrap">
+    <img alt="Alia Fresh website project" height="840" src="../../assets/crm.jpg" width="1200"/>
    </section>
+
+
    <section class="wrap product-story">
     <article>
      <p class="eyebrow">

@@ -248,30 +248,19 @@ require_once __DIR__ . '/includes/header.php';
                         class="project product-project"
                         data-category="software"
                         href="projects/crm-software/index.html"
-                        ><div class="product-art" style="--product-color: #7655ad">
-                            <div class="product-window">
-                                <div class="product-window-bar"><i></i><i></i><i></i><b>CRM Software</b></div>
-                                <div class="product-window-body">
-                                    <aside><b>C</b><i></i><i></i><i></i></aside>
-                                    <div>
-                                        <small>WORKSPACE OVERVIEW</small>
-                                        <h3>New enquiries</h3>
-                                        <div class="preview-stats">
-                                            <span>Overview<b>•••</b></span
-                                            ><span>Activity<b>↗</b></span
-                                            ><span>Workspace<b>✓</b></span>
-                                        </div>
-                                        <div class="preview-rows">
-                                            <div><i></i><span>New enquiries</span><b>→</b></div>
-                                            <div><i></i><span>Follow-up workspace</span><b>→</b></div>
-                                            <div><i></i><span>Customer activity</span><b>→</b></div>
-                                            <div><i></i><span>Sales overview</span><b>→</b></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="preview-disclosure">ILLUSTRATIVE PREVIEW · NOT A PRODUCT SCREENSHOT</span>
+                        >
+                        
+                     
+                       <div class="product-art real-product-art" >
+                            <img
+                                src="assets/crm.jpg"
+                                alt="CRM product screenshot"
+                                loading="lazy"
+            
+                            /><span class="preview-disclosure">PRODUCT SCREENSHOT</span>
                         </div>
+
+
                         <div class="project-caption">
                             <div>
                                 <small>SALES & CUSTOMER RELATIONSHIPS</small>
