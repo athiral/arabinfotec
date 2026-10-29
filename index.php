@@ -370,7 +370,7 @@ require_once __DIR__ . '/includes/header.php';
       Custom systems for the people who use them every day.
      </p>
      <div class="product-lines">
-      <a href="app-development">
+      <a href="solutions/blueforceops">
        <div>
         <h3>
          Workforce management
@@ -383,7 +383,7 @@ require_once __DIR__ . '/includes/header.php';
         &nearrow;
        </span>
       </a>
-      <a href="app-development">
+      <a href="solutions/varletpark">
        <div>
         <h3>
          Valet parking operations
