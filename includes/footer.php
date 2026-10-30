@@ -326,7 +326,7 @@ $base_url = isset($base_url) ? $base_url : '';
     </form>
    </div>
   </div>
-  <script src="<?php echo $base_url; ?>app.js?v=3.7"></script>
+  <script src="<?php echo $base_url; ?>app.js?v=3.8"></script>
   <?php if (!empty($extra_scripts)) echo $extra_scripts; ?>
  </body>
 </html>

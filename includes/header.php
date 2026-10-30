@@ -39,6 +39,7 @@ $body_class = isset($body_class) ? $body_class : '';
   <meta content="website" property="og:type"/>
   <title><?php echo htmlspecialchars($page_title, ENT_QUOTES, 'UTF-8'); ?></title>
   <link href="<?php echo $base_url; ?>favicon.svg" rel="icon" type="image/svg+xml"/>
+  <link href="<?php echo $base_url; ?>style.css" rel="preload" as="style"/>
   <link href="<?php echo $base_url; ?>style.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>pages.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>motion.css" rel="stylesheet"/>
@@ -48,7 +49,6 @@ $body_class = isset($body_class) ? $body_class : '';
   <link href="<?php echo $base_url; ?>leadership.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>product-work.css" rel="stylesheet"/>
   <link href="<?php echo $base_url; ?>solutions.css" rel="stylesheet"/>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <?php if (!empty($extra_head)) echo $extra_head; ?>
 
   <!-- Google Tag Manager -->

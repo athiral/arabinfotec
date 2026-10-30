@@ -1,4 +1,56 @@
 'use strict';
+// Intelligent lazy loader for Google reCAPTCHA (Zero TBT on initial page load)
+let recaptchaLoaded = false;
+let recaptchaLoadPromise = null;
+
+function loadRecaptcha() {
+  if (recaptchaLoaded && typeof grecaptcha !== 'undefined') return Promise.resolve();
+  if (recaptchaLoadPromise) return recaptchaLoadPromise;
+
+  recaptchaLoadPromise = new Promise((resolve) => {
+    if (typeof grecaptcha !== 'undefined') {
+      recaptchaLoaded = true;
+      return resolve();
+    }
+    const script = document.createElement('script');
+    script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      recaptchaLoaded = true;
+      if (typeof grecaptcha !== 'undefined' && grecaptcha.ready) {
+        grecaptcha.ready(() => {
+          document.querySelectorAll('.g-recaptcha').forEach((el) => {
+            if (!el.hasChildNodes()) {
+              try {
+                grecaptcha.render(el, { sitekey: el.dataset.sitekey || '6LcCZQYuAAAAAHFKJV_GCiQ_ilGN7hGUOPWwwnQy' });
+              } catch (e) {}
+            }
+          });
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    };
+    script.onerror = () => resolve();
+    document.head.appendChild(script);
+  });
+  return recaptchaLoadPromise;
+}
+
+// Trigger lazy load on user intent (scroll, hover over form, input focus, or click)
+['scroll', 'mousemove', 'touchstart', 'keydown'].forEach((evt) => {
+  window.addEventListener(evt, () => loadRecaptcha(), { once: true, passive: true });
+});
+
+// Also trigger immediately when any form element is approached or focused
+document.addEventListener('focusin', (e) => {
+  if (e.target && (e.target.closest('#brief-form') || e.target.closest('#brochure-modal') || e.target.id === 'open-brochure-modal')) {
+    loadRecaptcha();
+  }
+}, { passive: true });
+
 const menu=document.querySelector('.menu'),nav=document.querySelector('#nav');
 function closeMenu(){if(!menu||!nav)return;nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open menu');}
 menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close menu':'Open menu');nav.classList.toggle('open',open);});
@@ -43,9 +95,12 @@ if(form){
     const status=document.querySelector('#form-status');
     const submitBtn=form.querySelector('#submit-btn')||form.querySelector('button[type="submit"]');
 
+    await loadRecaptcha();
     let recaptchaToken='';
     if(typeof grecaptcha!=='undefined'&&grecaptcha.getResponse){
-      recaptchaToken=grecaptcha.getResponse();
+      try {
+        recaptchaToken=grecaptcha.getResponse();
+      } catch (e) {}
     }
 
     if(!recaptchaToken){
@@ -207,6 +262,7 @@ if(demoNames[demoSolution]&&document.querySelector('#message'))document.querySel
   if (!modal || !openBtn) return;
 
   function openModal() {
+    loadRecaptcha();
     modal.classList.add('is-active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -326,7 +382,8 @@ if(demoNames[demoSolution]&&document.querySelector('#message'))document.querySel
       }
 
       // 4. reCAPTCHA check
-      const recaptchaToken = form.querySelector('[name="g-recaptcha-response"]')?.value || '';
+      await loadRecaptcha();
+      const recaptchaToken = form.querySelector('[name="g-recaptcha-response"]')?.value || (typeof grecaptcha !== 'undefined' ? grecaptcha.getResponse() : '');
       if (!recaptchaToken) {
         if (status) {
           status.className = 'brochure-status error';
